@@ -6,17 +6,23 @@ import {
   loadingSelector,
   ordersSelector
 } from '../../services/slices/order-slice';
+import {
+  isAuthCheckedSelector,
+  userDataSelector
+} from '../../services/slices/user-slice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
   const orders = useSelector(ordersSelector);
   const isLoading = useSelector(loadingSelector);
+  const isAuthChecked = useSelector(isAuthCheckedSelector);
+  const user = useSelector(userDataSelector);
 
   useEffect(() => {
-    if (!orders.length) {
+    if (isAuthChecked && user && !orders.length) {
       dispatch(getOrders());
     }
-  }, [dispatch]);
+  }, [dispatch, isAuthChecked, user, orders.length]);
 
   return <ProfileOrdersUI orders={orders} />;
 };

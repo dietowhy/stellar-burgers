@@ -27,7 +27,13 @@ const feedSlice = createSlice({
     feedIsLoadingSelector: (state) => state.loading,
     feedErrorSelector: (state) => state.error
   },
-  reducers: {},
+  reducers: {
+    addOrderToFeed: (state, action) => {
+      state.orders.unshift(action.payload); // добавляем в начало
+      state.total += 1;
+      state.totalToday += 1;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.pending, (state) => {
@@ -55,3 +61,5 @@ export const {
   feedErrorSelector,
   feedSelector
 } = feedSlice.selectors;
+
+export const { addOrderToFeed } = feedSlice.actions;

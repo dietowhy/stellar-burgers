@@ -21,7 +21,8 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import store from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { setAuthChecked } from '../../services/slices/user-slice';
+import { setAuthChecked, getUser } from '../../services/slices/user-slice';
+import { getCookie } from '../../utils/cookie';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -41,7 +42,18 @@ function AppContent() {
   const background = location.state && location.state.background;
 
   useEffect(() => {
-    store.dispatch(setAuthChecked());
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      store
+        .dispatch(getUser())
+        .unwrap()
+        .catch((error) => {
+          console.log('Auth check failed:', error);
+          store.dispatch(setAuthChecked());
+        });
+    } else {
+      store.dispatch(setAuthChecked());
+    }
   }, []);
 
   const handleModalClose = () => {

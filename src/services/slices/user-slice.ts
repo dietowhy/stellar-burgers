@@ -194,6 +194,7 @@ const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.isAuthChecked = true;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
@@ -203,6 +204,8 @@ const userSlice = createSlice({
           (action.payload as string) ||
           action.error.message ||
           'Не удалось получить данные пользователя';
+
+        clearTokens();
       });
 
     // update user

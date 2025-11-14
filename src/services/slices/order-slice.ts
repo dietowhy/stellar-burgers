@@ -28,7 +28,14 @@ export const getOrderByNumber = createAsyncThunk(
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrderModal: (state) => {
+      state.orderModalData = null;
+    },
+    addOrderToList: (state, action) => {
+      state.orders.unshift(action.payload);
+    }
+  },
   selectors: {
     orderRequestSelector: (state) => state.orderRequest,
     orderModalDataSelector: (state) => state.orderModalData,
@@ -75,6 +82,7 @@ export const orderSlice = createSlice({
 });
 
 export const orderReducer = orderSlice.reducer;
+export const { clearOrderModal } = orderSlice.actions;
 export const {
   orderRequestSelector,
   orderModalDataSelector,

@@ -29,7 +29,7 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     }, [constructorItems, ingredient._id, countProp]);
 
     const handleAdd = () => {
-      dispatch(addIngredient({ ingredient }));
+      dispatch(addIngredient(ingredient));
     };
 
     return (

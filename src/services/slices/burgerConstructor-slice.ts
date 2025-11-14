@@ -7,11 +7,6 @@ const initialState: TBurgerConstructorState = {
   ingredients: []
 };
 
-const withId = (item: TIngredient): TConstructorIngredient => ({
-  ...item,
-  id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
-});
-
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
@@ -21,15 +16,27 @@ const burgerConstructorSlice = createSlice({
     constructorIngredientsSelector: (state) => state.ingredients
   },
   reducers: {
-    addIngredient: (
-      state,
-      action: PayloadAction<{ ingredient: TIngredient }>
-    ) => {
-      const ing = withId(action.payload.ingredient);
-      if (ing.type === 'bun') {
-        state.bun = ing;
-      } else {
-        state.ingredients.push(ing);
+    addIngredient: {
+      prepare: (ingredient: TIngredient) => ({
+        payload: {
+          ingredient: {
+            ...ingredient,
+            id: crypto.randomUUID
+              ? crypto.randomUUID()
+              : `${Date.now()}-${Math.random()}`
+          }
+        }
+      }),
+      reducer: (
+        state,
+        action: PayloadAction<{ ingredient: TConstructorIngredient }>
+      ) => {
+        const ing = action.payload.ingredient;
+        if (ing.type === 'bun') {
+          state.bun = ing;
+        } else {
+          state.ingredients.push(ing);
+        }
       }
     },
     removeIngredient: (state, action: PayloadAction<{ id: string }>) => {

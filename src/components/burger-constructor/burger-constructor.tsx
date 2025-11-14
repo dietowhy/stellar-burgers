@@ -9,8 +9,10 @@ import {
 import {
   getOrderBurger,
   orderModalDataSelector,
-  orderRequestSelector
+  orderRequestSelector,
+  clearOrderModal
 } from '../../services/slices/order-slice';
+import { getFeeds, addOrderToFeed } from '../../services/slices/feed-slice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -28,11 +30,16 @@ export const BurgerConstructor: FC = () => {
     ];
     dispatch(getOrderBurger(ids))
       .unwrap()
-      .then(() => dispatch(clearConstructor()))
+      .then((result) => {
+        dispatch(clearConstructor());
+        dispatch(addOrderToFeed(result.order));
+      })
       .catch(() => void 0);
   };
 
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(clearOrderModal());
+  };
 
   const price = useMemo(
     () =>
