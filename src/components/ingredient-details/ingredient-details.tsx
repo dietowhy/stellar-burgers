@@ -5,8 +5,7 @@ import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useSelector, useDispatch } from '../../services/store';
 import {
   selectIngredients,
-  selectIngredientsLoading,
-  getIngredients
+  selectIngredientsLoading
 } from '../../services/slices/ingredients-slice';
 
 export const IngredientDetails: FC = () => {
@@ -14,12 +13,6 @@ export const IngredientDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const ingredients = useSelector(selectIngredients);
   const isLoading = useSelector(selectIngredientsLoading);
-
-  useEffect(() => {
-    if (!ingredients.length) {
-      dispatch(getIngredients());
-    }
-  }, [dispatch, ingredients.length]);
 
   const ingredientData = useMemo(
     () => ingredients.find((i) => i._id === id) || null,

@@ -6,12 +6,10 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import {
   orderModalDataSelector,
-  getOrderByNumber
+  getOrderByNumber,
+  clearOrderModal
 } from '../../services/slices/order-slice';
-import {
-  selectIngredients,
-  getIngredients
-} from '../../services/slices/ingredients-slice';
+import { selectIngredients } from '../../services/slices/ingredients-slice';
 import { useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
@@ -24,10 +22,14 @@ export const OrderInfo: FC = () => {
     if (number && !orderData) {
       dispatch(getOrderByNumber(Number(number)));
     }
-    if (!ingredients.length) {
-      dispatch(getIngredients());
-    }
-  }, [dispatch, number, orderData, ingredients.length]);
+  }, [dispatch, number, orderData]);
+
+  useEffect(
+    () => () => {
+      dispatch(clearOrderModal());
+    },
+    [dispatch]
+  );
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

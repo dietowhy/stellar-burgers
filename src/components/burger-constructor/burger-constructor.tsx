@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
@@ -13,15 +14,22 @@ import {
   clearOrderModal
 } from '../../services/slices/order-slice';
 import { getFeeds, addOrderToFeed } from '../../services/slices/feed-slice';
+import { userDataSelector } from '../../services/slices/user-slice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const constructorItems = useSelector(constructorItemsSelector);
   const orderRequest = useSelector(orderRequestSelector);
   const orderModalData = useSelector(orderModalDataSelector);
+  const user = useSelector(userDataSelector);
 
   const onOrderClick = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     if (!constructorItems.bun || orderRequest) return;
     const ids = [
       constructorItems.bun._id,

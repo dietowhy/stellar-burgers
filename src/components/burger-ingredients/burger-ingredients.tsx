@@ -8,8 +8,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   selectIngredients,
   selectIngredientsLoading,
-  selectIngredientsError,
-  getIngredients
+  selectIngredientsError
 } from '../../services/slices/ingredients-slice';
 
 export const BurgerIngredients: FC = () => {
@@ -17,12 +16,6 @@ export const BurgerIngredients: FC = () => {
   const ingredients = useSelector(selectIngredients);
   const isLoading = useSelector(selectIngredientsLoading);
   const error = useSelector(selectIngredientsError);
-
-  useEffect(() => {
-    if (!ingredients.length && !isLoading) {
-      dispatch(getIngredients());
-    }
-  }, [dispatch, ingredients.length, isLoading]);
 
   const buns: TIngredient[] = useMemo(
     () => ingredients.filter((i) => i.type === 'bun'),

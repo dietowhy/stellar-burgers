@@ -18,10 +18,11 @@ import {
   useNavigate
 } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store from '../../services/store';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { setAuthChecked, getUser } from '../../services/slices/user-slice';
+import { getIngredients } from '../../services/slices/ingredients-slice';
 import { getCookie } from '../../utils/cookie';
 import '../../index.css';
 import styles from './app.module.css';
@@ -39,6 +40,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const background = location.state && location.state.background;
 
   useEffect(() => {
@@ -54,6 +56,10 @@ function AppContent() {
     } else {
       store.dispatch(setAuthChecked());
     }
+  }, []);
+
+  useEffect(() => {
+    store.dispatch(getIngredients());
   }, []);
 
   const handleModalClose = () => {
